@@ -6,6 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import edu.iesam.superheroapi.R
+import edu.iesam.superheroapi.features.superheroes.data.local.SuperheroDataRepository
+import edu.iesam.superheroapi.features.superheroes.data.remote.SuperHeroesApiRemoteDataSource
+import edu.iesam.superheroapi.features.superheroes.domain.FetchSuperheroesUseCase
+import edu.iesam.superheroapi.features.superheroes.domain.PruebaSuperheroe
+import edu.iesam.superheroapi.features.superheroes.domain.SuperHeroe
+import edu.iesam.superheroapi.features.superheroes.domain.SuperheroRepository
 
 class SuperHeroesListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,5 +23,22 @@ class SuperHeroesListActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        getSuperheroes()
     }
+
+    fun getSuperheroes() {
+        val remoteDataSource = SuperHeroesApiRemoteDataSource()
+        val heroRepository = PruebaSuperheroe(remoteDataSource)
+        val fetchSuperheroesUseCase = FetchSuperheroesUseCase(heroRepository)
+        val heroResult: Result<List<SuperHeroe>> = fetchSuperheroesUseCase.invoke()
+
+        return heroResult.fold(
+            onSuccess = { heroes ->
+                heroes },
+            onFailure = {
+                emptyList<SuperHeroe>() }
+        )
+
+    }
+
 }
