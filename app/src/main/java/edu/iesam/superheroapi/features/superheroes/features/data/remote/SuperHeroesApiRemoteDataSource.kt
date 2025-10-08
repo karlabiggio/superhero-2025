@@ -16,6 +16,8 @@ class SuperHeroesApiRemoteDataSource (private val apiClient: ApiClient){
         val apiService = apiClient.createService(SuperHeroApiService::class.java)
         apiService.findAll()
 
-        return Result.success(listOf())
+        return Result.success(listOf(
+
+        ))
     }
 }
