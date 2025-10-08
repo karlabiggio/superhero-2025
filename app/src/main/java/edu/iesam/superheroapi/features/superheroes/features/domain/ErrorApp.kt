@@ -2,7 +2,7 @@ package edu.iesam.superheroapi.features.superheroes.domain
 
 sealed class ErrorApp : Throwable(){
 
-    object SuperheroNotFound : ErrorApp()
+    object ServerError : ErrorApp()
     object APINotConnected : ErrorApp()
 
 }

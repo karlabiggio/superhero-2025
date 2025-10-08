@@ -1,6 +1,7 @@
 package edu.iesam.superheroapi.features.superheroes.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,6 +13,7 @@ import edu.iesam.superheroapi.features.superheroes.data.remote.SuperHeroesApiRem
 import edu.iesam.superheroapi.features.superheroes.domain.FetchSuperheroesUseCase
 import edu.iesam.superheroapi.features.superheroes.domain.SuperHeroe
 import edu.iesam.superheroapi.features.superheroes.domain.SuperheroRepository
+import kotlin.concurrent.thread
 
 class SuperHeroesListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,7 @@ class SuperHeroesListActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        loadSuperHeroes()
 
         val apiClient = ApiClient()
         val remoteDataSource = SuperHeroesApiRemoteDataSource(apiClient)
@@ -38,6 +41,10 @@ class SuperHeroesListActivity : AppCompatActivity() {
                 emptyList<SuperHeroe>()
             }
         )
+
+    }
+    private fun loadSuperHeroes(){
+        val apiRemote = SuperHeroesApiRemoteDataSource(ApiClient())
 
     }
 
