@@ -36,6 +36,7 @@ class SuperHeroesListActivity : AppCompatActivity() {
             insets
         }
         setUpObserver()
+        viewModel.loadSuperHeroes()
 
     }
     private fun setUpObserver(){
