@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import edu.iesam.superheroapi.R
 import edu.iesam.superheroapi.features.superheroes.core.api.ApiClient
 import edu.iesam.superheroapi.features.superheroes.data.local.SuperheroDataRepository
@@ -16,6 +17,15 @@ import edu.iesam.superheroapi.features.superheroes.domain.SuperheroRepository
 import kotlin.concurrent.thread
 
 class SuperHeroesListActivity : AppCompatActivity() {
+
+    private val viewModel = SuperHeroesListViewModel(
+        FetchSuperheroesUseCase(
+            SuperheroDataRepository(
+                SuperHeroesApiRemoteDataSource(ApiClient())
+            )
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,27 +35,37 @@ class SuperHeroesListActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        loadSuperHeroes()
-
-        val apiClient = ApiClient()
-        val remoteDataSource = SuperHeroesApiRemoteDataSource(apiClient)
-        val heroDataRepository = SuperheroDataRepository(remoteDataSource)
-        val fetchSuperheroesUseCase = FetchSuperheroesUseCase(heroDataRepository)
-
-        val viewModel = SuperHeroesListViewModel(fetchSuperheroesUseCase)
-        viewModel.getSuperheroes().fold(
-            onSuccess = { heroes ->
-                heroes
-            },
-            onFailure = {
-                emptyList<SuperHeroe>()
-            }
-        )
+        setUpObserver()
 
     }
-    private fun loadSuperHeroes(){
-        val apiRemote = SuperHeroesApiRemoteDataSource(ApiClient())
+    private fun setUpObserver(){
+        val observer = Observer<SuperHeroesListViewModel.UIState>{ uIState ->
+            //El viewmodel me pasa el UIState
+            if(uIState.isLoading){
+                //Muestro un spinner
+            }else {
+                //oculto spinner
+            }
 
+            if(uIState.error != null){
+
+            }else{
+
+            }
+
+//            uIState.error?.let{
+//                //visualizar pantalla de error
+//            } ?: {
+//                //ocultar error
+//
+//            }
+
+
+            uIState.superheroes?.let { superHeroes ->
+                superHeroes.isEmpty()
+            }
+        }
+        viewModel.uiState.observe(this, observer)
     }
 
 }

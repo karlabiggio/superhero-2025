@@ -4,7 +4,7 @@ import edu.iesam.superheroapi.features.superheroes.data.remote.SuperHeroesApiRem
 
 class FetchSuperheroesUseCase(private val superheroRepository: SuperheroRepository) {
 
-    operator fun invoke() : Result<List<SuperHeroe>>{
+    suspend operator fun invoke() : Result<List<SuperHeroe>>{
         return superheroRepository.fetchSuperheroes()
         }
 
